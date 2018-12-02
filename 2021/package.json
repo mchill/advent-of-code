@@ -1,0 +1,18 @@
+{
+  "name": "mchill-aoc-2021",
+  "description": "Advent of Code 2021",
+  "author": "Matthew Hill",
+  "engines": {
+    "node": "^16.0.0"
+  },
+  "packageManager": "yarn@3.2.0-rc.6",
+  "scripts": {
+    "test": "ts-node $0/solution.ts $0/sample.txt",
+    "solve": "ts-node $0/solution.ts $0/input.txt"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.11",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2"
+  }
+}
