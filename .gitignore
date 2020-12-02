@@ -1,4 +1,7 @@
+.vscode/
 *.out
 *.exe
 *.swp
 *~
+Debug/
+obj/
