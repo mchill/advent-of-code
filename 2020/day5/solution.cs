@@ -11,11 +11,11 @@ class Day5 {
         Console.WriteLine("Part 2: " + part2(seats));
     }
 
-    private static long part1(IEnumerable<int> seats) {
+    private static int part1(IEnumerable<int> seats) {
         return seats.Max();
     }
 
-    private static long part2(IEnumerable<int> seats) {
+    private static int part2(IEnumerable<int> seats) {
         var allSeats = new HashSet<int>(Enumerable.Range(0, 127 * 8 + 7)).Except(seats);
         for (int seat = 1; seat < allSeats.Count() - 1; seat++) {
             int current = allSeats.ElementAt(seat);
