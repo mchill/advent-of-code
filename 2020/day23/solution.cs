@@ -10,63 +10,61 @@ static class CircularLinkedList {
 
 class Day23 {
     public static void Main() {
-        var cups = readCups();
+        (var cups, var first, var last) = readCups();
 
-        Console.WriteLine("Part 1: " + part1(new LinkedList<int>(cups)));
-        Console.WriteLine("Part 2: " + part2(new LinkedList<int>(cups)));
+        Console.WriteLine("Part 1: " + part1((int[])cups.Clone(), first));
+        Console.WriteLine("Part 2: " + part2((int[])cups.Clone(), first, last));
     }
 
-    private static string part1(LinkedList<int> cups) {
-        game(cups, 100);
-        while (cups.First.Value != 1) {
-            var last = cups.Last;
-            cups.RemoveLast();
-            cups.AddFirst(last);
+    private static string part1(int[] cups, int first) {
+        game(cups, first, 100);
+
+        string result = "";
+        int current = cups[0];
+        while (current != 0) {
+            result += (current + 1);
+            current = cups[current];
         }
-        return string.Join("", cups.Skip(1));
+
+        return string.Join("", result);
     }
 
-    private static long part2(LinkedList<int> cups) {
-        foreach (int cup in Enumerable.Range(cups.Count + 1, 1000000 - cups.Count)) {
-            cups.AddLast(cup);
+    private static long part2(int[] cups, int first, int last) {
+        int cupCount = cups.Length;
+        cups[last] = cupCount;
+        Array.Resize(ref cups, 1000000);
+        foreach (int cup in Enumerable.Range(cupCount, 1000000 - cupCount)) {
+            cups[cup] = cup + 1;
         }
-        game(cups, 10000000);
-        var cup1 = cups.Find(1);
-        return Convert.ToInt64(cup1.NextOrFirst().Value) * cup1.NextOrFirst().NextOrFirst().Value;
+        cups[cups.Length - 1] = first;
+
+        game(cups, first, 10000000);
+        return Convert.ToInt64(cups[0] + 1) * (cups[cups[0]] + 1);
     }
 
-    private static void game(LinkedList<int> cups, int moves) {
-        var cupMap = new Dictionary<int, LinkedListNode<int>>();
-        LinkedListNode<int> current = cups.First;
-        while (current != null) {
-            cupMap[current.Value] = current;
-            current = current.Next;
-        }
-
-        current = cups.First;
-        int cupCount = cups.Count;
-        var removed = new Stack<LinkedListNode<int>>();
-
+    private static void game(int[] cups, int current, int moves) {
         foreach (var _ in Enumerable.Range(0, moves)) {
-            while (removed.Count < 3) {
-                removed.Push(current.NextOrFirst());
-                cups.Remove(current.NextOrFirst());
+            int removed = cups[current];
+            cups[current] = cups[cups[cups[cups[current]]]];
+
+            int destination = (current + cups.Length - 1) % cups.Length;
+            while (destination == removed || destination == cups[removed] || destination == cups[cups[removed]]) {
+                destination = (destination + cups.Length - 1) % cups.Length;
             }
-            LinkedListNode<int> destination = null;
-            for (int i = cupCount - 2; i >= 0; i--) {
-                destination = cupMap[(current.Value + i) % cupCount + 1];
-                if (!removed.Contains(destination)) {
-                    break;
-                }
-            }
-            while (removed.Count > 0) {
-                cups.AddAfter(destination, removed.Pop());
-            }
-            current = current.NextOrFirst();
+
+            cups[cups[cups[removed]]] = cups[destination];
+            cups[destination] = removed;
+
+            current = cups[current];
         }
     }
 
-    private static LinkedList<int> readCups() {
-        return new LinkedList<int>("418976235".Select(c => Int32.Parse(c.ToString())));
+    private static Tuple<int[], int, int> readCups() {
+        List<int> cups = "418976235".Select(c => Int32.Parse(c.ToString()) - 1).ToList();
+        return Tuple.Create(
+            Enumerable.Range(0, cups.Count).Select(i => cups[(cups.IndexOf(i) + 1) % cups.Count]).ToArray(),
+            cups.First(),
+            cups.Last()
+        );
     }
 }
