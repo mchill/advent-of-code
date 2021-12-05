@@ -2,6 +2,12 @@
 
 My solutions for the [Advent of Code](http://adventofcode.com/).
 
-I originally solved the 2015 puzzles using C++, and later repeated them using
-Ruby. I solved the 2016 puzzles using Python, and the 2017 puzzles using Go.
-After missing two years, I solved the 2020 puzzles using C#.
+I solved the puzzles in the following languages:
+
+Year | Language
+-----|---------
+2015 | C++, Ruby
+2016 | Python
+2017 | Go
+2020 | C#
+2021 | TypeScript
