@@ -28,7 +28,7 @@ class Board {
     }
 }
 
-async function solve(findLoser: boolean = false) {
+function solve(findLoser: boolean = false) {
     const lines = fs.readFileSync(process.argv[2], 'utf-8').toString().split(/\r?\n/).slice(0, -1);
     const draw = lines[0].split(',');
 
@@ -53,7 +53,7 @@ async function solve(findLoser: boolean = false) {
     }
 }
 
-(async () => {
-    console.log('Part 1: ', await solve());
-    console.log('Part 2: ', await solve(true));
+(() => {
+    console.log('Part 1: ', solve());
+    console.log('Part 2: ', solve(true));
 })();

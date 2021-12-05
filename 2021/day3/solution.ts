@@ -19,8 +19,8 @@ function findRating(numbers: number[][], bitCriteria: (bits: number[]) => number
     return convert(filteredNumbers[0]);
 }
 
-async function part1() {
-    const lines = fs.readFileSync(process.argv[2]).toString().split(/\r?\n/).slice(0, -1);
+function part1() {
+    const lines = fs.readFileSync(process.argv[2], 'utf-8').toString().split(/\r?\n/).slice(0, -1);
     const numbers = lines.map((line) => line.split('').map((char) => Number(char)));
 
     let bitSums = Array<number>(numbers[0].length).fill(0);
@@ -32,8 +32,8 @@ async function part1() {
     return gamma * epsilon;
 }
 
-async function part2() {
-    const lines = fs.readFileSync(process.argv[2]).toString().split(/\r?\n/).slice(0, -1);
+function part2() {
+    const lines = fs.readFileSync(process.argv[2], 'utf-8').toString().split(/\r?\n/).slice(0, -1);
     const numbers = lines.map((line) => line.split('').map((char) => Number(char)));
 
     const oxygen = findRating(numbers, (bits) => +(sum(bits) >= bits.length / 2));
@@ -42,7 +42,7 @@ async function part2() {
     return oxygen * c02;
 }
 
-(async () => {
-    console.log('Part 1: ', await part1());
-    console.log('Part 2: ', await part2());
+(() => {
+    console.log('Part 1: ', part1());
+    console.log('Part 2: ', part2());
 })();

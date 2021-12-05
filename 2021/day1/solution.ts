@@ -1,15 +1,12 @@
 import * as fs from 'fs';
-import * as readline from 'readline';
 
-async function solve(windowSize: number) {
-    const rl = readline.createInterface({
-        input: fs.createReadStream(process.argv[2]),
-    });
+function solve(windowSize: number) {
+    const lines = fs.readFileSync(process.argv[2], 'utf-8').toString().split(/\r?\n/).slice(0, -1);
 
     let increaseCount = 0;
     let window = [];
 
-    for await (const line of rl) {
+    for (const line of lines) {
         const depth = Number(line);
         window.push(depth);
 
@@ -27,7 +24,7 @@ async function solve(windowSize: number) {
     return increaseCount;
 }
 
-(async () => {
-    console.log('Part 1: ', await solve(1));
-    console.log('Part 2: ', await solve(3));
+(() => {
+    console.log('Part 1: ', solve(1));
+    console.log('Part 2: ', solve(3));
 })();

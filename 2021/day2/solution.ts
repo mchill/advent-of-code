@@ -1,16 +1,13 @@
 import * as fs from 'fs';
-import * as readline from 'readline';
 
-async function solve() {
-    const rl = readline.createInterface({
-        input: fs.createReadStream(process.argv[2]),
-    });
+function solve() {
+    const lines = fs.readFileSync(process.argv[2], 'utf-8').toString().split(/\r?\n/).slice(0, -1);
 
     let position = 0;
     let depth = 0;
     let aim = 0;
 
-    for await (const line of rl) {
+    for (const line of lines) {
         const [direction, distanceStr] = line.split(' ');
         const distance = Number(distanceStr);
 
@@ -31,8 +28,8 @@ async function solve() {
     return { position, depth, aim };
 }
 
-(async () => {
-    const { position, depth, aim } = await solve();
+(() => {
+    const { position, depth, aim } = solve();
 
     console.log('Part 1: ', position * aim);
     console.log('Part 2: ', position * depth);
