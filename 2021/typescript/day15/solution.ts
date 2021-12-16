@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as _ from 'lodash';
 
 class Node {
     public edges: Node[] = [];
@@ -23,28 +22,29 @@ function findShortestPath(grid: Node[][]) {
     const nodes = grid.flat();
     const target = nodes[nodes.length - 1];
 
-    const openList = [nodes[0]];
-    const closedList: Node[] = [];
+    const openList = new Set([nodes[0]]);
+    const closedList = new Set<Node>();
 
-    while (openList.length > 0) {
-        const node = openList.sort((a, b) => a.csf- b.csf)[0];
+    while (openList.size > 0) {
+        const node = [...openList].sort((a, b) => a.csf - b.csf)[0];
 
         for (const next of node.edges) {
-            const newCSF = node.csf + next.cost + 1;
+            const csf = node.csf + next.cost + 1;
 
-            if (openList.includes(next)) {
-                if (newCSF < next.csf) {
-                    next.csf = newCSF;
+            if (openList.has(next)) {
+                if (csf < next.csf) {
+                    next.csf = csf;
                 }
-            } else if (!closedList.includes(next)) {
-                next.csf = newCSF;
-                openList.push(next);
+            } else if (!closedList.has(next)) {
+                next.csf = csf;
+                openList.add(next);
             }
         }
 
-        closedList.push(...openList.splice(openList.indexOf(node), 1));
+        openList.delete(node);
+        closedList.add(node);
 
-        if (closedList.includes(target)) {
+        if (closedList.has(target)) {
             return target.csf;
         }
     }
