@@ -10,11 +10,11 @@ fn main() {
 fn day1(filename: &str) -> (u32, u32) {
     let input = read_file(get_day(file!()), filename);
 
-    let elves = sorted(input.split("\n\n").map(|elf| {
-        elf.split("\n")
-            .map(|line| line.parse::<u32>().unwrap_or_default())
-            .sum::<u32>()
-    }));
+    let elves = sorted(
+        input
+            .split("\n\n")
+            .map(|elf| elf.split("\n").map(|line| line.parse::<u32>().unwrap_or_default()).sum::<u32>()),
+    );
 
     return (elves.clone().last().unwrap(), elves.rev().take(3).sum());
 }
