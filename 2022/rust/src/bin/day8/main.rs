@@ -72,7 +72,7 @@ fn count_visible_from_position(forest: &Vec<Vec<u32>>, position: (usize, usize),
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_day8() {
+    fn test() {
         let (p1, p2) = crate::solve("sample.txt");
         assert_eq!(p1, 21);
         assert_eq!(p2, 8);

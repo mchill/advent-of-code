@@ -22,7 +22,7 @@ fn day1(filename: &str) -> (u32, u32) {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_day1() {
+    fn test() {
         let (p1, p2) = crate::day1("sample.txt");
         assert_eq!(p1, 24000);
         assert_eq!(p2, 45000);

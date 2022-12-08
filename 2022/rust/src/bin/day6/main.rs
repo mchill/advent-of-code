@@ -23,7 +23,7 @@ fn solve(filename: &str, distinct_size: usize) -> usize {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_day6() {
+    fn test() {
         let p1 = crate::solve("sample.txt", 4);
         let p2 = crate::solve("sample.txt", 14);
         assert_eq!(p1, 7);

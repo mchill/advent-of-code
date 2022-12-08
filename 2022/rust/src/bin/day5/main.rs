@@ -50,7 +50,7 @@ fn solve(filename: &str, multi_lift: bool) -> String {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_day5() {
+    fn test() {
         let p1 = crate::solve("sample.txt", false);
         let p2 = crate::solve("sample.txt", true);
         assert_eq!(p1, "CMZ");

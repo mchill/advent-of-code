@@ -9,5 +9,5 @@ cargo run --bin day#
 To test the solution against the sample input:
 
 ```bash
-cargo test day#
+cargo test --bin day#
 ```

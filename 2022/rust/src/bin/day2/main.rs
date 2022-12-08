@@ -61,7 +61,7 @@ fn solve(filename: &str) -> (u32, u32) {
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_day2() {
+    fn test() {
         let (p1, p2) = crate::solve("sample.txt");
         assert_eq!(p1, 15);
         assert_eq!(p2, 12);
