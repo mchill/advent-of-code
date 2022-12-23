@@ -12,35 +12,35 @@ pub enum Side {
     Top = 3,
 }
 
+#[derive(PartialEq, Eq)]
 pub struct Face {
+    name: char,
     map: Vec<Vec<char>>,
     offset: (usize, usize),
     sides: HashMap<Side, Edge>,
 }
 
+#[derive(PartialEq, Eq, Copy, Clone)]
 pub struct Edge {
     face: char,
     edge: Side,
 }
 
 fn main() {
-    let p1 = solve("input.txt", &mut shapes::get_input_p1(), 50);
-    let p2 = solve("input.txt", &mut shapes::get_input_p2(), 50);
+    let p1 = solve("input.txt", &shapes::glue_planar, 50);
+    let p2 = solve("input.txt", &shapes::glue_cubic, 50);
     println!("Part 1: {}", p1);
     println!("Part 2: {}", p2);
 }
 
-fn solve(filename: &str, faces: &mut HashMap<char, Face>, size: usize) -> usize {
+fn solve(filename: &str, glue: &dyn Fn(&mut HashMap<char, Face>), size: usize) -> usize {
     let input = read_file(get_day(file!()), filename);
     let (map, path) = input.strip_suffix("\n").unwrap().split_once("\n\n").unwrap();
     let map: Vec<Vec<char>> = map.split("\n").map(|line| line.chars().collect()).collect();
     let path = path.replace("L", " L ").replace("R", " R ");
 
-    for (_, face) in faces.iter_mut() {
-        for y in face.offset.1..face.offset.1 + size {
-            face.map.push(map[y][face.offset.0..face.offset.0 + size].to_vec());
-        }
-    }
+    let mut faces = shapes::construct(&map, size);
+    glue(&mut faces);
 
     let mut face = faces.get(&'A').unwrap();
     let mut pos = (face.map[0].iter().position(|c| *c == '.').unwrap(), 0);
@@ -55,7 +55,7 @@ fn solve(filename: &str, faces: &mut HashMap<char, Face>, size: usize) -> usize 
         for _ in 0..instruction.parse::<usize>().unwrap() {
             let mut new_face = face;
             let mut new_dir = dir;
-            let (mut new_pos, overflowed) = forward(pos, dir, size);
+            let (mut new_pos, overflowed) = forward(pos, dir, 1, size);
 
             if overflowed {
                 let side = face.sides.get(&dir).unwrap();
@@ -77,12 +77,12 @@ fn solve(filename: &str, faces: &mut HashMap<char, Face>, size: usize) -> usize 
     return 1000 * (pos.1 + face.offset.1 + 1) + 4 * (pos.0 + face.offset.0 + 1) + dir as usize;
 }
 
-fn forward((x, y): (usize, usize), dir: Side, size: usize) -> ((usize, usize), bool) {
+fn forward((x, y): (usize, usize), dir: Side, n: usize, upper_bound: usize) -> ((usize, usize), bool) {
     return match dir {
-        Right => ((x + 1, y), x == size - 1),
-        Bottom => ((x, y + 1), y == size - 1),
-        Left => ((x.max(1) - 1, y), x == 0),
-        Top => ((x, y.max(1) - 1), y == 0),
+        Right => ((x + n, y), x == upper_bound - 1),
+        Bottom => ((x, y + n), y == upper_bound - 1),
+        Left => ((x.max(n) - n, y), x < n),
+        Top => ((x, y.max(n) - n), y < n),
     };
 }
 
@@ -105,8 +105,8 @@ mod tests {
 
     #[test]
     fn test() {
-        let p1 = crate::solve("sample.txt", &mut shapes::get_sample_p1(), 4);
-        let p2 = crate::solve("sample.txt", &mut shapes::get_sample_p2(), 4);
+        let p1 = crate::solve("sample.txt", &shapes::glue_planar, 4);
+        let p2 = crate::solve("sample.txt", &shapes::glue_cubic, 4);
         assert_eq!(p1, 6032);
         assert_eq!(p2, 5031);
     }
