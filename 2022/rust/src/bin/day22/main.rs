@@ -2,7 +2,7 @@ pub mod shapes;
 
 use crate::Side::*;
 use advent_of_code::{get_day, read_file};
-use std::collections::HashMap;
+use std::{cell::RefCell, collections::HashMap, rc::Rc};
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
 pub enum Side {
@@ -12,17 +12,16 @@ pub enum Side {
     Top = 3,
 }
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct Face {
-    name: char,
     map: Vec<Vec<char>>,
     offset: (usize, usize),
     sides: HashMap<Side, Edge>,
 }
 
-#[derive(PartialEq, Eq, Copy, Clone)]
+#[derive(PartialEq, Eq, Clone)]
 pub struct Edge {
-    face: char,
+    face: Rc<RefCell<Face>>,
     edge: Side,
 }
 
@@ -33,7 +32,7 @@ fn main() {
     println!("Part 2: {}", p2);
 }
 
-fn solve(filename: &str, glue: &dyn Fn(&mut HashMap<char, Face>), size: usize) -> usize {
+fn solve(filename: &str, glue: &dyn Fn(&mut Vec<Rc<RefCell<Face>>>), size: usize) -> usize {
     let input = read_file(get_day(file!()), filename);
     let (map, path) = input.strip_suffix("\n").unwrap().split_once("\n\n").unwrap();
     let map: Vec<Vec<char>> = map.split("\n").map(|line| line.chars().collect()).collect();
@@ -42,7 +41,7 @@ fn solve(filename: &str, glue: &dyn Fn(&mut HashMap<char, Face>), size: usize) -
     let mut faces = shapes::construct(&map, size);
     glue(&mut faces);
 
-    let mut face = faces.get(&'A').unwrap();
+    let mut face = faces[0].borrow().to_owned();
     let mut pos = (face.map[0].iter().position(|c| *c == '.').unwrap(), 0);
     let mut dir = Right;
 
@@ -53,13 +52,13 @@ fn solve(filename: &str, glue: &dyn Fn(&mut HashMap<char, Face>), size: usize) -
         }
 
         for _ in 0..instruction.parse::<usize>().unwrap() {
-            let mut new_face = face;
+            let mut new_face = face.clone();
             let mut new_dir = dir;
             let (mut new_pos, overflowed) = forward(pos, dir, 1, size);
 
             if overflowed {
                 let side = face.sides.get(&dir).unwrap();
-                new_face = faces.get(&side.face).unwrap();
+                new_face = side.face.borrow().to_owned();
                 new_dir = rotate(side.edge, true, 2);
                 new_pos = traverse_edge(pos, size, dir, side.edge);
             }
