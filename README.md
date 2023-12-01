@@ -12,3 +12,4 @@ I solved the puzzles in the following languages:
 | 2020 | C#         |
 | 2021 | TypeScript |
 | 2022 | Rust       |
+| 2023 | Python     |
