@@ -30,13 +30,11 @@ if __name__ == "__main__":
         print("Part 2: " + str(main(content, parse_strings=True)))
 
 
-def test_part1():
+def test():
     with open(day + "/sample1.txt") as file:
         content = file.read()
         assert main(content) == 142
 
-
-def test_part1():
     with open(day + "/sample2.txt") as file:
         content = file.read()
         assert main(content, parse_strings=True) == 281
