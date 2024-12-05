@@ -1,10 +1,12 @@
+package io.mchill.day4;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-class Solution {
+public class Solution {
     public static void main(String[] args) throws IOException {
         List<String> input = readInput(args[0]);
         System.out.println("Part 1: " + part1(input));

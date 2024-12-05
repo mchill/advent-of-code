@@ -3,13 +3,11 @@
 To run the solution for a given day against my input:
 
 ```bash
-cd day#
-java Solution.java input.txt
+mvn exec:java -Dexec.mainClass="io.mchill.day#.Solution" -Dexec.args="input.txt"
 ```
 
 To test the solution against the sample input:
 
 ```bash
-cd day#
-java Solution.java sample.txt
+mvn exec:java -Dexec.mainClass="io.mchill.day#.Solution" -Dexec.args="sample.txt"
 ```

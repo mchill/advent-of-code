@@ -1,3 +1,5 @@
+package io.mchill.day1;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -7,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class Solution {
+public class Solution {
     public static void main(String[] args) throws IOException {
         String input = readInput(args[0]);
         System.out.println("Part 1: " + part1(input));
