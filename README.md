@@ -13,3 +13,4 @@ I solved the puzzles in the following languages:
 | 2021 | TypeScript |
 | 2022 | Rust       |
 | 2023 | Python     |
+| 2024 | Java       |
